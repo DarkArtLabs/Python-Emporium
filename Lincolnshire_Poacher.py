@@ -28,7 +28,7 @@ def generate_song(filename='lincolnshire_poacher.wav', repeats=2, sample_rate=44
 
     attack_time = 0.005   # 5 ms
     release_time = 0.015  # 15 ms
-    
+
     for _ in range(repeats):
         for freq, duration in notes:
             total_samples = int(sample_rate * duration)
@@ -59,12 +59,14 @@ def generate_song(filename='lincolnshire_poacher.wav', repeats=2, sample_rate=44
             gap = np.zeros(int(sample_rate * 0.1), dtype=np.float32)
             audio = np.concatenate((audio, gap))
 
-        # normalize to 16 bit
-        audio_int16 = np.int16(audio * 32767)
+    # normalize to 16 bit
+    audio_int16 = np.int16(audio * 32767)
         
-        # save audio to file
-        wavfile.write(filename, sample_rate, audio_int16)
+    # save audio to file
+    wavfile.write(filename, sample_rate, audio_int16)
+
+    return filename
 
 if __name__ == "__main__":
-    generate_song()
-    print("Generated 'lincolnshire_poacher.wav'")
+    filename = generate_song()
+    print(f"Generated {filename}")
