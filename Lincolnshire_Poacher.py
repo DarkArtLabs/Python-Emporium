@@ -58,6 +58,7 @@ def generate_song(filename='lincolnshire_poacher.wav', sample_rate=44100):
         attack_samples = int(attack_time * sample_rate)
         release_samples = int(release_time * sample_rate)
         
+        # apply attack sustain release
         if total_samples > attack_samples + release_samples:
             attack = np.linspace(0, 1, attack_samples)
             sustain = np.ones(total_samples - attack_samples - release_samples)
@@ -67,7 +68,7 @@ def generate_song(filename='lincolnshire_poacher.wav', sample_rate=44100):
             # fallback if note is too short
             ar_envelope = np.bartlett(total_samples) 
             
-        # apply envelopes to note
+        # apply decay
         note *= decay_envelope * ar_envelope
         audio = np.concatenate((audio, note))
 
