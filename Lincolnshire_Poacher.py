@@ -3,25 +3,28 @@ from scipy.io import wavfile
 
 # function that generates the first two bars of Lincolnshire Poacher and repeats it twice
 # outputs a wav file
-def generate_song(filename='lincolnshire_poacher.wav', repeats=2, sample_rate=44100):
+def generate_song(filename='lincolnshire_poacher_test.wav', repeats=2, sample_rate=44100):
     notes = [
         (293.66, 0.1), # D
-        (392.00, 0.2), # G
         (392.00, 0.1), # G
         (392.00, 0.1), # G
-        (369.99, 0.1), # F#
-        (329.63, 0.1), # E
-        (293.66, 0.2), # D
-        (261.63, 0.1), # C
-        (246.94, 0.2), # B
+        (392.00, 0.1), # G
+        (392.00, 0.2), # G extra note
+        (369.99, 0.2), # F#
+        (329.63, 0.17),# E
+        (293.66, 0.4), # D
+        (261.63, 0.2), # C
+        (246.94, 0.35),# B
         (293.66, 0.1), # D
-        (392.00, 0.2), # G
+        (392.00, 0.15),# G
+        (000.00, 0.1),
         (392.00, 0.1), # G
-        (440.00, 0.2), # A
+        (440.00, 0.15),# A
+        (000.00, 0.1),
         (369.99, 0.1), # F#
         (392.00, 0.5), # G
 
-        (000.00, 0.2), # rest
+        (000.00, 0.3), # rest
     ]
 
     audio = np.array([], dtype=np.float32)
@@ -30,7 +33,12 @@ def generate_song(filename='lincolnshire_poacher.wav', repeats=2, sample_rate=44
     release_time = 0.015  # 15 ms
 
     for _ in range(repeats):
-        for freq, duration in notes:
+        for i, (freq, duration) in enumerate(notes):
+
+            # tuning temp and pitch of song, optional
+            duration *= 1.15
+            #freq *= 1.06
+
             total_samples = int(sample_rate * duration)
             t = np.linspace(0, duration, total_samples, endpoint=False)
             note = 0.5 * np.sin(2 * np.pi * freq * t)
@@ -55,9 +63,13 @@ def generate_song(filename='lincolnshire_poacher.wav', repeats=2, sample_rate=44
             note *= decay_envelope * ar_envelope
             audio = np.concatenate((audio, note))
 
-            # small gap between notes
-            gap = np.zeros(int(sample_rate * 0.1), dtype=np.float32)
-            audio = np.concatenate((audio, gap))
+            # slurred notes
+            if freq == 0 or i == 4 or i == 5 or i == 6 or i == 7 or i == 8 or i == 9 or i == 15:
+                pass 
+            else:
+                # small gap between notes
+                gap = np.zeros(int(sample_rate * 0.1), dtype=np.float32)
+                audio = np.concatenate((audio, gap))
 
     # normalize to 16 bit
     audio_int16 = np.int16(audio * 32767)
