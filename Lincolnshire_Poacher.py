@@ -3,7 +3,7 @@ from scipy.io import wavfile
 
 # function that generates the first two bars of Lincolnshire Poacher and repeats it twice
 # outputs a wav file
-def generate_song(filename='lincolnshire_poacher_test.wav', repeats=2, sample_rate=44100):
+def generate_song(filename='lincolnshire_poacher.wav', repeats=2, sample_rate=44100):
     notes = [
         (293.66, 0.1), # D
         (392.00, 0.1), # G
